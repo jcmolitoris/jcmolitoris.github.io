@@ -31,10 +31,10 @@
     <input name="submit" type="submit" value="submit"/>
 </form> 
     <!--Placeholder for identify and track script -->
-const md5 = require('md5');
 <script type="text/javascript">
       function identify(e){
         e.preventDefault();
+        const md5 = require('md5');
         var form = e.target;
         var email = md5('hello');
         var fullname = form["fullname"].value;
