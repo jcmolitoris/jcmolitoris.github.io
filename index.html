@@ -34,9 +34,8 @@
 <script type="text/javascript">
       function identify(e){
         e.preventDefault();
-        const md5 = require('md5');
         var form = e.target;
-        var email = md5('hello');
+        var email = form["email"].value;
         var fullname = form["fullname"].value;
         var destination = form["destination"].value;
         var details = form["details"].value;
