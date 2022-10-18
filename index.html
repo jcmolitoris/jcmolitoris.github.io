@@ -31,31 +31,16 @@
     <input name="submit" type="submit" value="submit"/>
 </form> 
     <!--Placeholder for identify and track script -->
-<script type="text/javascript">
-    // Importing the crypto library
-const crypto = require("crypto");
-
-// Defining the algorithm
-let algorithm = "sha256";
-
-// Defining the key
-let key = "GeeksForGeeks";
-
-// Creating the digest in hex encoding
-let digest1 = crypto.createHash(algorithm).update(key).digest("hex");
-
-console.log(digest1);
-    
+<script type="text/javascript">    
       function identify(e){
         e.preventDefault();
         var form = e.target;
         var email = form["email"].value;
-        var hashedEmail = crypto.createHash(algorithm).update(key).digest("hex")
         var fullname = form["fullname"].value;
         var destination = form["destination"].value;
         var details = form["details"].value;
         var user = {
-            email: hashedEmail, 
+            email: email, 
             name: fullname, 
             destination: destination, 
             details: details
