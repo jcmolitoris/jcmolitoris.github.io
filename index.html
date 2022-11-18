@@ -47,8 +47,8 @@
         };
         analytics.identify('test-user-abcd1234', {
             email: email, 
-            other_name: fullname,
-            new_event: "Form Submitted"
+            name: fullname,
+            event_action: "Form Submitted"
         });
         analytics.track('destination submitted', user, function() {
             window.location.href = "";
