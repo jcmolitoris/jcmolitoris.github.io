@@ -256,5 +256,16 @@
         input.addEventListener('input', () => setError(input, ''))
       );
     </script>
+
+    <script>
+    // Fire a Track event every time the page loads.
+    window.addEventListener('load', function () {
+      analytics.track('Example Track Event', {
+        page_path: window.location.pathname,
+        page_title: document.title
+      });
+    });
+  </script>
+
   </body>
   </html>
