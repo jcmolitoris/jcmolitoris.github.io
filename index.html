@@ -1,8 +1,6 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-<title>Home Questionnaire<span id="selection-marker-1" class="redactor-selection-marker"></span></title> 
-    
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
   <!--Placeholder for Segment Snippet new edit --> 
   <script data-segment-write-key="KvFT4HDxqpkeu258GE5YhagNSzTq0ihn">
     !(function () {
@@ -109,43 +107,154 @@
         }
     })();
   </script>
-
-</head> 
-<body> 
-<h1>What is your favorite place to travel?</h1> 
-<p>I am building a directory of the sweetest travel destinations.</p>  
-<form name="travel" onsubmit="identify(event)">
-     What is your favorite travel destination?
-    <input name="destination" required="" size="81" type="text"/> 
-    <br><br><br> 
-    Any recommendations (cool things to do, places to visit or restaurants to eat)? 
-    <br><br> 
-    <textarea cols="81" name="details" required="" rows="10">
-    </textarea> 
-    <br><br> 
-    Name: <input name="fullname" required="" size="75" type="text"/> 
-    <br><br> 
-    Email: <input name="email" required="" size="75" type="email"/> 
-    <br><br>
-    <input name="submit" type="submit" value="submit"/>
-</form> 
-    <!--Placeholder for identify and track script -->
-<script type="text/javascript">    
-      function identify(e){
-        e.preventDefault();
-        var form = e.target;
-        var email = form["email"].value;
-        var fullname = form["fullname"].value;
-        var destination = form["destination"].value;
-        var details = form["details"].value;
-        var user = {
-            email: email, 
-            name: fullname, 
-            destination: destination, 
-            details: details
-        };
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo Signup</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f4f5f7;
+        display: flex;
+        justify-content: center;
+        padding: 4rem 1rem;
+        margin: 0;
       }
-</script>    
-    
-</body> 
-</html>
+      form {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 360px;
+      }
+      h2 { margin-top: 0; }
+      label { display: block; font-weight: 600; margin-top: 1rem; }
+      input {
+        width: 100%;
+        padding: 0.6rem;
+        margin-top: 0.3rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 1rem;
+      }
+      input.invalid { border-color: #d93025; }
+      .error { color: #d93025; font-size: 0.85rem; min-height: 1em; margin-top: 0.25rem; }
+      button {
+        margin-top: 1.5rem;
+        width: 100%;
+        padding: 0.7rem;
+        background: #f22f46;
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.6; cursor: not-allowed; }
+      #status { margin-top: 1rem; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <form id="signup-form" novalidate>
+      <h2>Sign up</h2>
+
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" autocomplete="name" />
+      <div class="error" id="name-error"></div>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" />
+      <div class="error" id="email-error"></div>
+
+      <button type="submit">Submit</button>
+      <div id="status" role="status" aria-live="polite"></div>
+    </form>
+
+    <script>
+      // Set this to your backend endpoint. Leave as null to simulate a submission (demo mode).
+      const SUBMIT_URL = null;
+
+      const form = document.getElementById('signup-form');
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const statusEl = document.getElementById('status');
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      function setError(input, message) {
+        document.getElementById(input.id + '-error').textContent = message;
+        input.classList.toggle('invalid', Boolean(message));
+        input.setAttribute('aria-invalid', Boolean(message));
+      }
+
+      function validate() {
+        const name = nameInput.value.trim();
+        const email = emailInput.value.trim();
+        let valid = true;
+
+        if (name.length < 2) {
+          setError(nameInput, 'Please enter your name.');
+          valid = false;
+        } else {
+          setError(nameInput, '');
+        }
+
+        if (!EMAIL_PATTERN.test(email)) {
+          setError(emailInput, 'Please enter a valid email address.');
+          valid = false;
+        } else {
+          setError(emailInput, '');
+        }
+
+        return valid ? { name, email } : null;
+      }
+
+      async function submitData(data) {
+        if (!SUBMIT_URL) {
+          // Demo mode: pretend the request took a moment.
+          console.log('Demo submission:', data);
+          return new Promise((resolve) => setTimeout(resolve, 600));
+        }
+
+        const res = await fetch(SUBMIT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error('Request failed with status ' + res.status);
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        statusEl.textContent = '';
+
+        const data = validate();
+        if (!data) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+  
+        try {
+          await submitData(data);
+          statusEl.style.color = '#188038';
+          statusEl.textContent = 'Thanks, ' + data.name + '! We\'ll be in touch at ' + data.email + '.';
+          form.reset();
+        } catch (err) {
+          console.error(err);
+          statusEl.style.color = '#d93025';
+          statusEl.textContent = 'Something went wrong. Please try again.';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit';
+        }
+      });
+  
+      // Clear a field's error as soon as the user starts fixing it.
+      [nameInput, emailInput].forEach((input) =>
+        input.addEventListener('input', () => setError(input, ''))
+      );
+    </script>
+  </body>
+  </html>
